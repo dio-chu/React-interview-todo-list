@@ -1,0 +1,74 @@
+.d-button {
+  $root: &;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background-color: #1976d2;
+  color: white;
+  gap: 8px;
+  padding: 0 16px;
+
+  &:hover:not(#{$root}--disabled) {
+    background-color: darken(#1976d2, 10%);
+  }
+
+  // Size variants
+  &--size {
+    &-small {
+      font-size: 0.875rem;
+      min-height: 30px;
+    }
+
+    &-medium {
+      font-size: 1rem;
+      min-height: 36px;
+    }
+
+    &-large {
+      font-size: 1.125rem;
+      min-height: 42px;
+    }
+  }
+
+  // Density variants
+  &--density {
+    &-default {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+
+    &-comfortable {
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+
+    &-compact {
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
+  }
+
+  // Disabled state
+  &--disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // Elements
+  &__label {
+    line-height: 1;
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1em;
+  }
+}
