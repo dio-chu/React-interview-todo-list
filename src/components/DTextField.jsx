@@ -1,6 +1,12 @@
 import PropTypes from "prop-types";
 import "./styles/DTextField.scss";
 
+/**
+ * DSelect DTextField
+ * @author dio-chu
+ * @description 輸入input 組件
+ */
+
 const DTextField = ({
   value = "",
   onChange,

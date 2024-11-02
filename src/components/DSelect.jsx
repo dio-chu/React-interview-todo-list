@@ -4,7 +4,7 @@ import "./styles/DSelect.scss";
 /**
  * DSelect Component
  * @author dio-chu
- * @description
+ * @description 橫向的選擇組 組件
  * @example
  * <DSelect options={selectData} selectedValue={selected} onChange={handleSelectChange} />
  */
@@ -30,7 +30,6 @@ const DSelect = ({ options, selectedValue, onChange }) => {
   );
 };
 
-// Prop Types for type checking
 DSelect.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
@@ -41,10 +40,6 @@ DSelect.propTypes = {
   ).isRequired,
   selectedValue: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-};
-
-DSelect.defaultProps = {
-  selectedValue: "",
 };
 
 export default DSelect;
