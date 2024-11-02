@@ -1,0 +1,38 @@
+.d-select {
+  display: inline-flex;
+  border-radius: 5px;
+
+  &__option {
+    padding: 10px 20px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: color 0.3s;
+    color: #797979;
+    background-color: transparent;
+
+    &:not(:last-child) {
+      position: relative;
+
+      &::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 24%;
+        height: 50%;
+        width: 1.5px;
+        background-color: #797979;
+      }
+    }
+
+    &--selected {
+      color: #1976d2;
+    }
+
+    &:hover {
+      color: #176bc0;
+      background-color: darken(#f0f8ff, 1%);
+    }
+  }
+}

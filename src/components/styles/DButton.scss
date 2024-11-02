@@ -18,7 +18,6 @@
     background-color: darken(#1976d2, 10%);
   }
 
-  // Size variants
   &--size {
     &-small {
       font-size: 0.875rem;
@@ -36,7 +35,6 @@
     }
   }
 
-  // Density variants
   &--density {
     &-default {
       padding-top: 4px;
@@ -54,14 +52,12 @@
     }
   }
 
-  // Disabled state
   &--disabled {
     opacity: 0.6;
     cursor: not-allowed;
     pointer-events: none;
   }
 
-  // Elements
   &__label {
     line-height: 1;
   }

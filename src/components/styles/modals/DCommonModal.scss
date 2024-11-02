@@ -1,0 +1,47 @@
+.d-common-modal {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: #666;
+    font-size: 18px;
+    line-height: 1;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #333;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    padding: 24px;
+    overflow: auto;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 24px;
+  }
+}
