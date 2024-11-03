@@ -1,0 +1,35 @@
+.todo-page {
+  padding: 16px;
+
+  &__header {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__filters {
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__table-wrapper {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+  }
+
+  &__table-actions {
+    min-height: 40px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__table-container {
+    margin-top: 16px;
+  }
+}

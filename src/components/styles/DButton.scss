@@ -14,41 +14,55 @@
   gap: 8px;
   padding: 0 16px;
 
-  &:hover:not(#{$root}--disabled) {
-    background-color: darken(#1976d2, 10%);
+  &:hover {
+    background-color: #1165b9;
   }
 
-  &--size {
-    &-small {
-      font-size: 0.875rem;
-      min-height: 30px;
-    }
-
-    &-medium {
-      font-size: 1rem;
-      min-height: 36px;
-    }
-
-    &-large {
-      font-size: 1.125rem;
-      min-height: 42px;
-    }
-  }
-
+  // 組合 size 和 density
   &--density {
     &-default {
-      padding-top: 4px;
-      padding-bottom: 4px;
+      &#{$root}--size-small {
+        height: 32px;
+        font-size: 14px;
+      }
+      &#{$root}--size-medium {
+        height: 40px;
+        font-size: 16px;
+      }
+      &#{$root}--size-large {
+        height: 48px;
+        font-size: 18px;
+      }
     }
 
     &-comfortable {
-      padding-top: 12px;
-      padding-bottom: 12px;
+      &#{$root}--size-small {
+        height: 28px;
+        font-size: 13px;
+      }
+      &#{$root}--size-medium {
+        height: 36px;
+        font-size: 15px;
+      }
+      &#{$root}--size-large {
+        height: 44px;
+        font-size: 17px;
+      }
     }
 
     &-compact {
-      padding-top: 0px;
-      padding-bottom: 0px;
+      &#{$root}--size-small {
+        height: 24px;
+        font-size: 12px;
+      }
+      &#{$root}--size-medium {
+        height: 32px;
+        font-size: 14px;
+      }
+      &#{$root}--size-large {
+        height: 40px;
+        font-size: 16px;
+      }
     }
   }
 
@@ -65,6 +79,6 @@
   &__icon {
     display: inline-flex;
     align-items: center;
-    font-size: 1em;
+    font-size: inherit; // 讓圖標繼承按鈕的字體大小
   }
 }
