@@ -1,0 +1,16 @@
+.interview-form {
+  &__field {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    gap: 20px;
+  }
+
+  &__label {
+    white-space: nowrap;
+  }
+
+  &__input {
+    flex: 1;
+  }
+}
