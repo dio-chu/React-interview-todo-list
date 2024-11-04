@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import "./styles/DTextField.scss";
+import "../styles/components/DTextField.scss";
 
 /**
  * DSelect DTextField

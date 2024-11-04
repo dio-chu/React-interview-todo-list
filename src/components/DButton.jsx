@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import "./styles/DButton.scss";
+import "../styles/components/DButton.scss";
 
 const DButton = ({
   size = "medium",

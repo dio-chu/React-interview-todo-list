@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import "./styles/DCheckbox.scss";
+import "../styles/components/DCheckbox.scss";
 
 const DCheckbox = ({
   isChecked = false,

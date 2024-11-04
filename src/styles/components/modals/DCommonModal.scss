@@ -14,7 +14,7 @@
     margin: 0;
     font-size: 24px;
     font-weight: 500;
-    color: #333;
+    color: #155799;
   }
 
   &__close {
@@ -41,7 +41,6 @@
   &__footer {
     display: flex;
     justify-content: center;
-    gap: 12px;
-    padding: 16px 24px;
+    padding: 16px;
   }
 }

@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import "./styles/DSelect.scss";
+import "../styles/components/DSelect.scss";
 
 /**
  * DSelect Component

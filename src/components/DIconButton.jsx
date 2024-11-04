@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import "./styles/DIconButton.scss";
+import "../styles/components/DIconButton.scss";
 
 const DIconButton = ({ size = "medium", disabled = false, icon, onClick }) => {
   const buttonClasses = [
