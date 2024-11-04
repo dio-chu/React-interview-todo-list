@@ -33,7 +33,7 @@ export const INTERVIEW_RESULT_OPTIONS = [
   {
     id: "1",
     value: INTERVIEW_RESULT.NONE,
-    label: "全部",
+    label: "等待面試",
   },
   {
     id: "2",

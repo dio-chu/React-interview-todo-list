@@ -14,6 +14,7 @@ import InterviewFormModal from "./components/InterviewFormModal";
 import {
   INTERVIEW_STATUS,
   INTERVIEW_STATUS_FILTERS,
+  INTERVIEW_RESULT_OPTIONS,
 } from "../constants/interviewStatus";
 import { INTERVIEW_MODAL_MODE } from "../constants/interviewFormModal";
 
@@ -134,11 +135,10 @@ const TodoPage = () => {
       );
     }
     if (key === "status") {
-      const statusMap = {
-        [INTERVIEW_STATUS.SCHEDULED]: "已安排面試",
-        [INTERVIEW_STATUS.COMPLETED]: "已有結果",
-      };
-      return statusMap[item[key]] || item[key];
+      const statusOption = INTERVIEW_RESULT_OPTIONS.find(
+        (option) => option.value === item[key]
+      );
+      return statusOption ? statusOption.label : "未知狀態";
     }
     return item[key];
   };

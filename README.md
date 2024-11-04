@@ -1,5 +1,6 @@
 # 面試紀錄系統
 
+![Page](./public//readmeImg/PageImg.png)
 這是一個面試紀錄系統，以「面試中的前端工程師角度」設計，用於記錄和管理面試的詳細信息。系統主要通過列表（List）展示每個面試的以下信息：
 
 - **公司名稱**
@@ -31,7 +32,11 @@
 為了提升系統的可維護性和重用性，我自行開發了多個自訂組件，包括但不限於：
 
 - **DButton**：自訂按鈕組件，支持多種樣式和尺寸。
+- **DSelect**：自訂橫向的選擇群組組件。
 - **DCheckbox**：自訂復選框組件，支持批量選擇功能。
-- **DModal**：自訂模態視窗組件，支持動畫效果和可訪問性。
 - **DTextField**：自訂文字輸入框組件，支持圖標和錯誤訊息顯示。
-
+- **DModal**：自訂模態視窗組件，支持動畫效果和可訪問性。
+- **DCommonModal**：繼承 DModal，增加 header,content,footer。
+- **InterviewFormModal**：繼承 DCommonModal，TodoPage 專用組件，根據頁面點擊帶入的參數切換新增與編輯。
+  ![AddModal](./public//readmeImg/AddModal.png)
+  ![EditModal](./public//readmeImg/EditModal.png)
