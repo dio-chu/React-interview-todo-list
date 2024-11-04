@@ -33,7 +33,7 @@ describe("DCommonModal Component", () => {
   // 測試確認和取消按鈕
   it("renders and handles confirm and cancel buttons", () => {
     const onConfirm = vi.fn();
-    const onCancel = vi.fn();
+    const onClose = vi.fn();
 
     render(
       <DCommonModal
@@ -41,7 +41,7 @@ describe("DCommonModal Component", () => {
         confirmText="Confirm"
         cancelText="Cancel"
         onConfirm={onConfirm}
-        onCancel={onCancel}
+        onClose={onClose}
       >
         <div>Modal Content</div>
       </DCommonModal>
@@ -54,7 +54,7 @@ describe("DCommonModal Component", () => {
     expect(onConfirm).toHaveBeenCalled();
 
     fireEvent.click(cancelButton);
-    expect(onCancel).toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
   });
 
   // 測試隱藏頁腳

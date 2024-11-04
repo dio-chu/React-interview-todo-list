@@ -1,15 +1,15 @@
 import PropTypes from "prop-types";
-import "./styles/DSelect.scss";
+import "../styles/components/DSelect.scss";
 
 /**
  * DSelect Component
  * @author dio-chu
  * @description 橫向的選擇組 組件
  * @example
- * <DSelect options={selectData} selectedValue={selected} onChange={handleSelectChange} />
+ * <DSelect options={selectData} value={selected} onChange={handleSelectChange} />
  */
-const DSelect = ({ options, selectedValue, onChange }) => {
-  const updateValue = (value) => {
+const DSelect = ({ options = [], value, onChange = () => {}, name }) => {
+  const handleClick = (value) => {
     onChange(value);
   };
 
@@ -17,11 +17,13 @@ const DSelect = ({ options, selectedValue, onChange }) => {
     <div className="d-select">
       {options.map((option) => (
         <button
-          key={option.id}
+          key={option.id || option.value}
           className={`d-select__option ${
-            option.value === selectedValue ? "d-select__option--selected" : ""
+            option.value === value ? "d-select__option--selected" : ""
           }`}
-          onClick={() => updateValue(option.value)}
+          onClick={() => handleClick(option.value)}
+          type="button"
+          name={name}
         >
           {option.label}
         </button>
@@ -33,13 +35,15 @@ const DSelect = ({ options, selectedValue, onChange }) => {
 DSelect.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      id: PropTypes.string,
       value: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,
     })
-  ).isRequired,
-  selectedValue: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
+  ),
+  value: PropTypes.string,
+  defaultValue: PropTypes.string,
+  onChange: PropTypes.func,
+  name: PropTypes.string,
 };
 
 export default DSelect;

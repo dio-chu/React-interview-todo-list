@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import DCheckbox from "./DCheckbox";
-import "./styles/DDataTable.scss";
+import "../styles/components/DDataTable.scss";
 
 const DDataTable = ({
   headers = [],

@@ -1,7 +1,7 @@
-import { useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { CSSTransition } from "react-transition-group";
-import "../styles/modals/DModal.scss";
+import "../../styles/components/modals/DModal.scss";
 
 const DModal = ({
   isShow = false,
@@ -13,7 +13,9 @@ const DModal = ({
   isPersistent = false,
   children,
   onClose,
+  onExited,
 }) => {
+  const nodeRef = useRef(null);
   const handleBackdropClick = useCallback(
     (e) => {
       if (e.target.classList.contains("d-modal__backdrop") && isBackdropClick) {
@@ -41,8 +43,15 @@ const DModal = ({
   }, [isShow]);
 
   return (
-    <CSSTransition in={isShow} timeout={300} classNames="d-modal" unmountOnExit>
-      <div className="d-modal" onClick={handleBackdropClick}>
+    <CSSTransition
+      nodeRef={nodeRef}
+      in={isShow}
+      timeout={300}
+      classNames="d-modal"
+      unmountOnExit
+      onExited={onExited}
+    >
+      <div ref={nodeRef} className="d-modal" onClick={handleBackdropClick}>
         <div className="d-modal__backdrop"></div>
         <div
           className="d-modal__content"
@@ -71,6 +80,7 @@ DModal.propTypes = {
   isPersistent: PropTypes.bool,
   children: PropTypes.node,
   onClose: PropTypes.func,
+  onExited: PropTypes.func,
 };
 
 export default DModal;

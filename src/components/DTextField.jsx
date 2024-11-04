@@ -1,14 +1,9 @@
 import PropTypes from "prop-types";
-import "./styles/DTextField.scss";
-
-/**
- * DSelect DTextField
- * @author dio-chu
- * @description 輸入input 組件
- */
+import "../styles/components/DTextField.scss";
 
 const DTextField = ({
-  value = "",
+  value,
+  defaultValue,
   onChange,
   appendInnerIcon,
   prependInnerIcon,
@@ -27,6 +22,10 @@ const DTextField = ({
 
   const hasError = Array.isArray(errorMessages) && errorMessages.length > 0;
 
+  // 處理受控/非受控模式
+  const inputValue = value !== undefined ? { value } : { defaultValue };
+  const handleChange = onChange ? { onChange } : {};
+
   return (
     <div className="d-text-field" style={containerStyle}>
       <div
@@ -43,9 +42,9 @@ const DTextField = ({
         <input
           type="text"
           className="d-text-field__input"
-          value={value}
-          onChange={onChange}
           placeholder={placeholder}
+          {...inputValue}
+          {...handleChange}
           {...inputProps}
         />
 
@@ -71,6 +70,7 @@ const DTextField = ({
 
 DTextField.propTypes = {
   value: PropTypes.string,
+  defaultValue: PropTypes.string,
   onChange: PropTypes.func,
   appendInnerIcon: PropTypes.node,
   prependInnerIcon: PropTypes.node,

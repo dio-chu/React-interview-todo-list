@@ -1,18 +1,16 @@
 import PropTypes from "prop-types";
 import DModal from "./DModal";
 import DButton from "../DButton";
-import "../styles/modals/DCommonModal.scss";
+import "../../styles/components/modals/DCommonModal.scss";
 
 const DCommonModal = ({
   title = "",
   onConfirm,
-  onCancel,
   showFooter = true,
   confirmText = "",
   cancelText = "",
   ...modalProps
 }) => {
-  // 檢查是否需要顯示任何按鈕
   const showConfirmButton = confirmText !== "";
   const showCancelButton = cancelText !== "";
 
@@ -34,11 +32,12 @@ const DCommonModal = ({
             {showCancelButton && (
               <DButton
                 label={cancelText}
-                onClick={onCancel || modalProps.onClose}
+                size="small"
+                onClick={modalProps.onClose}
               />
             )}
             {showConfirmButton && (
-              <DButton label={confirmText} onClick={onConfirm} />
+              <DButton label={confirmText} size="small" onClick={onConfirm} />
             )}
           </div>
         )}
