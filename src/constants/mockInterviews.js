@@ -1,6 +1,7 @@
 export const MOCK_INTERVIEWS = [
   {
     id: "1",
+    edit: true,
     companyName: "科技股份有限公司",
     position: "前端工程師",
     status: "scheduled",
@@ -9,6 +10,7 @@ export const MOCK_INTERVIEWS = [
   },
   {
     id: "2",
+    edit: false,
     companyName: "創新數位有限公司",
     position: "資深前端開發者",
     status: "completed",
@@ -17,6 +19,7 @@ export const MOCK_INTERVIEWS = [
   },
   {
     id: "3",
+    edit: true,
     companyName: "未來科技股份公司",
     position: "React 開發工程師",
     status: "scheduled",
@@ -25,6 +28,7 @@ export const MOCK_INTERVIEWS = [
   },
   {
     id: "4",
+    edit: false,
     companyName: "智慧軟體公司",
     position: "全端工程師",
     status: "completed",
@@ -33,6 +37,7 @@ export const MOCK_INTERVIEWS = [
   },
   {
     id: "5",
+    edit: true,
     companyName: "雲端服務有限公司",
     position: "Frontend Lead",
     status: "scheduled",
@@ -42,6 +47,7 @@ export const MOCK_INTERVIEWS = [
 ];
 
 export const TABLE_HEADERS = [
+  { key: "edit", title: "編輯" },
   { key: "companyName", title: "公司名稱" },
   { key: "position", title: "面試職位" },
   { key: "status", title: "狀態" },

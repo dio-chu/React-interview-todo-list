@@ -3,10 +3,10 @@ import { useState } from "react";
 
 // component
 import DButton from "../components/DButton";
-import DCheckbox from "../components/DCheckbox";
 import DSelect from "../components/DSelect";
 import DTextField from "../components/DTextField";
 import DDataTable from "../components/DDataTable";
+import DIconButton from "../components/DIconButton";
 
 import {
   INTERVIEW_STATUS,
@@ -14,8 +14,8 @@ import {
 } from "../constants/interviewStatus";
 import { MOCK_INTERVIEWS, TABLE_HEADERS } from "../constants/mockInterviews";
 
-import "./styles/TodoPage.scss";
-import { FaPlus, FaSearch, FaTrash } from "react-icons/fa";
+import "../styles/pages/TodoPage.scss";
+import { FaPlus, FaSearch, FaTrash, FaPencilAlt } from "react-icons/fa";
 
 const TodoPage = () => {
   const [selectedStatus, setSelectedStatus] = useState(INTERVIEW_STATUS.ALL);
@@ -57,6 +57,16 @@ const TodoPage = () => {
   };
 
   const renderCell = (key, item) => {
+    if (key === "edit") {
+      return (
+        <DIconButton
+          size="small"
+          disabled={!item.edit}
+          onClick={() => handleEdit(item.id)}
+          icon={<FaPencilAlt />}
+        />
+      );
+    }
     if (key === "status") {
       const statusMap = {
         [INTERVIEW_STATUS.SCHEDULED]: "已安排面試",
@@ -65,6 +75,9 @@ const TodoPage = () => {
       return statusMap[item[key]] || item[key];
     }
     return item[key];
+  };
+  const handleEdit = (id) => {
+    console.log("Edit item:", id);
   };
 
   const searchIcon = <FaSearch style={{ color: "#666", fontSize: "16px" }} />;
