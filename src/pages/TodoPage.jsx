@@ -1,5 +1,6 @@
 // hook
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 // component
 import DButton from "../components/DButton";
@@ -11,6 +12,7 @@ import DCommonModal from "../components/modals/DCommonModal";
 import InterviewFormModal from "./components/InterviewFormModal";
 
 // constant
+import { TABLE_HEADERS } from "../constants/tableHeaders";
 import {
   INTERVIEW_STATUS,
   INTERVIEW_STATUS_FILTERS,
@@ -18,24 +20,37 @@ import {
 } from "../constants/interviewStatus";
 import { INTERVIEW_MODAL_MODE } from "../constants/interviewFormModal";
 
-// fake data
-import { MOCK_INTERVIEWS, TABLE_HEADERS } from "../constants/mockInterviews";
+// redux actions and selectors
+import {
+  addInterview,
+  updateInterview,
+  deleteInterviews,
+  setSelectedStatus,
+  setSearchText,
+  updateSelectedItems,
+  selectInterviews,
+  selectSelectedItems,
+  selectSelectedStatus,
+  selectSearchText,
+} from "../store/interviewsSlice";
 
 // style
 import "../styles/pages/TodoPage.scss";
 import { FaPlus, FaSearch, FaTrash, FaPencilAlt } from "react-icons/fa";
 
 const TodoPage = () => {
-  // ui
-  const [selectedStatus, setSelectedStatus] = useState(INTERVIEW_STATUS.ALL);
-  const [searchText, setSearchText] = useState("");
-  const [selectedItems, setSelectedItems] = useState(new Set());
+  const dispatch = useDispatch();
 
-  // modal
+  // Redux state
+  const interviews = useSelector(selectInterviews);
+  const selectedItems = useSelector(selectSelectedItems);
+  const selectedStatus = useSelector(selectSelectedStatus);
+  const searchText = useSelector(selectSearchText);
+
+  // modal 相關的 state 保持本地管理
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState(INTERVIEW_MODAL_MODE.CREATE);
-
   const [formData, setFormData] = useState({
     companyName: "",
     position: "",
@@ -43,7 +58,7 @@ const TodoPage = () => {
     interviewDate: "",
   });
 
-  // 打開 modal 時設置初始數據
+  // Modal handlers
   const onClickNewInterview = () => {
     setModalMode(INTERVIEW_MODAL_MODE.CREATE);
     setFormData({
@@ -56,7 +71,7 @@ const TodoPage = () => {
   };
 
   const onClickEditInterview = (id) => {
-    const editItem = MOCK_INTERVIEWS.find((item) => item.id === id);
+    const editItem = interviews.find((item) => item.id === id);
     setModalMode(INTERVIEW_MODAL_MODE.EDIT);
     setFormData(editItem);
     setIsFormModalOpen(true);
@@ -74,53 +89,60 @@ const TodoPage = () => {
       interviewDate: "",
     });
   };
+
   const onFormModalSubmit = (formData) => {
-    console.log(
-      modalMode === INTERVIEW_MODAL_MODE.CREATE
-        ? "Create new interview:"
-        : "Update interview:",
-      formData
-    );
+    if (modalMode === INTERVIEW_MODAL_MODE.CREATE) {
+      dispatch(addInterview(formData));
+    } else {
+      dispatch(
+        updateInterview({
+          id: formData.id,
+          ...formData,
+        })
+      );
+    }
     onFormModalClose();
   };
 
   const onDeleteModalConfirm = () => {
-    console.log("Delete selected items:", Array.from(selectedItems));
+    dispatch(deleteInterviews(Array.from(selectedItems)));
     setIsDeleteModalOpen(false);
-    setSelectedItems(new Set());
   };
+
   const onClickDelete = () => {
     setIsDeleteModalOpen(true);
   };
+
   const onDeleteModalClose = () => {
     setIsDeleteModalOpen(false);
   };
 
-  // other
+  // Filter and search handlers
   const onStatusChange = (value) => {
-    setSelectedStatus(value);
+    dispatch(setSelectedStatus(value));
   };
 
   const onSearchChange = (e) => {
-    setSearchText(e.target.value);
+    dispatch(setSearchText(e.target.value));
   };
 
+  // Checkbox handlers
   const onHeaderCheckboxChange = (checked) => {
-    if (checked) {
-      setSelectedItems(new Set(MOCK_INTERVIEWS.map((item) => item.id)));
-    } else {
-      setSelectedItems(new Set());
-    }
+    dispatch(
+      updateSelectedItems({
+        checked,
+        itemIds: interviews.map((item) => item.id),
+      })
+    );
   };
 
   const onItemCheckboxChange = (checked, item) => {
-    const newSelected = new Set(selectedItems);
-    if (checked) {
-      newSelected.add(item.id);
-    } else {
-      newSelected.delete(item.id);
-    }
-    setSelectedItems(newSelected);
+    dispatch(
+      updateSelectedItems({
+        checked,
+        itemIds: item.id,
+      })
+    );
   };
 
   const renderCell = (key, item) => {
@@ -184,12 +206,12 @@ const TodoPage = () => {
         </div>
         <DDataTable
           headers={TABLE_HEADERS}
-          items={MOCK_INTERVIEWS}
+          items={interviews}
           showCheckbox
           onHeaderCheckboxChange={onHeaderCheckboxChange}
           onItemCheckboxChange={onItemCheckboxChange}
           renderCell={renderCell}
-          isHeaderChecked={selectedItems.size === MOCK_INTERVIEWS.length}
+          isHeaderChecked={selectedItems.size === interviews.length}
           getIsItemChecked={(item) => selectedItems.has(item.id)}
         />
       </div>
