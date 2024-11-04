@@ -38,6 +38,6 @@
 - **DTextField**：自訂文字輸入框組件，支持圖標和錯誤訊息顯示。
 - **DModal**：自訂模態視窗組件，支持動畫效果和可訪問性。
 - **DCommonModal**：繼承 DModal，增加 header,content,footer。
-- **InterviewFormModal**：繼承 DCommonModal，TodoPage 專用組件，根據頁面點擊帶入的參數切換新增與編輯。
+- **InterviewFormModal**：繼承 DCommonModal，TodoPage 專用組件，根據頁面帶入的參數切換新增與編輯。
   ![AddModal](./public//readmeImg/AddModal.png)
   ![EditModal](./public//readmeImg/EditModal.png)
