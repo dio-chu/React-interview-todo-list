@@ -1,6 +1,7 @@
 # 面試紀錄系統
 
-![Page](./public//readmeImg/PageImg.png)
+![image](https://github.com/user-attachments/assets/03f7459e-87e2-41c9-8463-1f3fa225ae3b)
+
 這是一個面試紀錄系統，以「面試中的前端工程師角度」設計，用於記錄和管理面試的詳細信息。系統主要通過列表（List）展示每個面試的以下信息：
 
 - **公司名稱**
