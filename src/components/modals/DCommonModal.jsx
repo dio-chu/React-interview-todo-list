@@ -6,7 +6,6 @@ import "../../styles/components/modals/DCommonModal.scss";
 const DCommonModal = ({
   title = "",
   onConfirm,
-  onCancel,
   showFooter = true,
   confirmText = "",
   cancelText = "",
@@ -34,7 +33,7 @@ const DCommonModal = ({
               <DButton
                 label={cancelText}
                 size="small"
-                onClick={onCancel || modalProps.onClose}
+                onClick={modalProps.onClose}
               />
             )}
             {showConfirmButton && (

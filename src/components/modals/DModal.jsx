@@ -13,6 +13,7 @@ const DModal = ({
   isPersistent = false,
   children,
   onClose,
+  onExited,
 }) => {
   const nodeRef = useRef(null);
   const handleBackdropClick = useCallback(
@@ -48,6 +49,7 @@ const DModal = ({
       timeout={300}
       classNames="d-modal"
       unmountOnExit
+      onExited={onExited}
     >
       <div ref={nodeRef} className="d-modal" onClick={handleBackdropClick}>
         <div className="d-modal__backdrop"></div>
@@ -78,6 +80,7 @@ DModal.propTypes = {
   isPersistent: PropTypes.bool,
   children: PropTypes.node,
   onClose: PropTypes.func,
+  onExited: PropTypes.func,
 };
 
 export default DModal;

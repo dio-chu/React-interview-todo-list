@@ -8,14 +8,12 @@ const DCheckbox = ({
   density = "default",
   onChange,
 }) => {
-  // 處理 checkbox 改變事件
   const handleChange = (e) => {
     if (!disabled && onChange) {
       onChange(e.target.checked);
     }
   };
 
-  // 組合 class names
   const checkboxClasses = [
     "d-checkbox",
     `d-checkbox--density-${density}`,
