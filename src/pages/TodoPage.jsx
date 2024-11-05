@@ -38,7 +38,9 @@ import {
   updateInterview,
   deleteInterviews,
   selectAllInterviews,
-  selectInterviewById,
+  setSearchText,
+  selectSearchText,
+  selectFilteredInterviews,
   TABLE_HEADERS,
 } from "../store/interviewSlice";
 
@@ -46,12 +48,12 @@ const TodoPage = () => {
   const dispatch = useDispatch();
   // ui
   const [selectedStatus, setSelectedStatus] = useState(INTERVIEW_STATUS.ALL);
-  const [searchText, setSearchText] = useState("");
   const [selectedItems, setSelectedItems] = useState(new Set());
 
-  // modal
+  // redux
+  const searchText = useSelector(selectSearchText);
+  const filteredInterviews = useSelector(selectFilteredInterviews);
   const { formModal, deleteModal } = useSelector((state) => state.modals);
-  // data table
   const interviews = useSelector(selectAllInterviews);
 
   // 打開 modal 時設置初始數據
@@ -106,7 +108,7 @@ const TodoPage = () => {
   };
 
   const onSearchChange = (e) => {
-    setSearchText(e.target.value);
+    dispatch(setSearchText(e.target.value));
   };
 
   const onHeaderCheckboxChange = (checked) => {
@@ -187,12 +189,12 @@ const TodoPage = () => {
         </div>
         <DDataTable
           headers={TABLE_HEADERS}
-          items={interviews}
+          items={filteredInterviews}
           showCheckbox
           onHeaderCheckboxChange={onHeaderCheckboxChange}
           onItemCheckboxChange={onItemCheckboxChange}
           renderCell={renderCell}
-          isHeaderChecked={selectedItems.size === interviews.length}
+          isHeaderChecked={selectedItems.size === filteredInterviews.length}
           getIsItemChecked={(item) => selectedItems.has(item.id)}
         />
       </div>

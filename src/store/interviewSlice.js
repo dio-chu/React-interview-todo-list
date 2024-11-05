@@ -1,4 +1,4 @@
-import { createSlice, createSelector } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import { INTERVIEW_RESULT } from "../constants/interviewStatus";
 
@@ -32,6 +32,7 @@ const initialState = {
       updateDate: "2024-10-30",
     },
   ],
+  searchText: "",
 };
 
 export const interviewSlice = createSlice({
@@ -68,18 +69,35 @@ export const interviewSlice = createSlice({
         (interview) => !idsToDelete.includes(interview.id)
       );
     },
+    setSearchText: (state, action) => {
+      state.searchText = action.payload;
+    },
   },
 });
 
 // Selectors
 export const selectAllInterviews = (state) => state.interviews.interviews;
+export const selectSearchText = (state) => state.interviews.searchText;
 
-export const selectInterviewById = createSelector(
-  [selectAllInterviews, (_, id) => id],
-  (interviews, id) => interviews.find((interview) => interview.id === id)
-);
+export const selectFilteredInterviews = (state) => {
+  const interviews = selectAllInterviews(state);
+  const searchText = selectSearchText(state).toLowerCase();
 
-export const { addInterview, updateInterview, deleteInterviews } =
-  interviewSlice.actions;
+  return searchText.trim()
+    ? interviews.filter(
+        (interview) =>
+          interview.companyName.toLowerCase().includes(searchText) ||
+          interview.position.toLowerCase().includes(searchText) ||
+          interview.interviewDate.includes(searchText)
+      )
+    : interviews;
+};
+
+export const {
+  addInterview,
+  updateInterview,
+  deleteInterviews,
+  setSearchText,
+} = interviewSlice.actions;
 
 export default interviewSlice.reducer;
