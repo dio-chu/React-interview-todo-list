@@ -1,5 +1,5 @@
 // hook
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // component
 import DButton from "../components/DButton";
@@ -12,7 +12,6 @@ import InterviewFormModal from "./components/InterviewFormModal";
 
 // constant
 import {
-  INTERVIEW_STATUS,
   INTERVIEW_STATUS_FILTERS,
   INTERVIEW_RESULT_OPTIONS,
 } from "../constants/interviewStatus";
@@ -40,23 +39,30 @@ import {
   selectAllInterviews,
   setSearchText,
   selectSearchText,
+  setSelectedStatus,
+  selectSelectedStatus,
   selectFilteredInterviews,
   TABLE_HEADERS,
 } from "../store/interviewSlice";
 
 const TodoPage = () => {
   const dispatch = useDispatch();
-  // ui
-  const [selectedStatus, setSelectedStatus] = useState(INTERVIEW_STATUS.ALL);
-  const [selectedItems, setSelectedItems] = useState(new Set());
-
-  // redux
-  const searchText = useSelector(selectSearchText);
-  const filteredInterviews = useSelector(selectFilteredInterviews);
+  // redux modal
   const { formModal, deleteModal } = useSelector((state) => state.modals);
-  const interviews = useSelector(selectAllInterviews);
 
-  // 打開 modal 時設置初始數據
+  // redux interview
+  const interviews = useSelector(selectAllInterviews);
+  const searchText = useSelector(selectSearchText);
+  const selectedStatus = useSelector(selectSelectedStatus);
+  const filteredInterviews = useSelector(selectFilteredInterviews);
+
+  // checkbox
+  const [selectedItems, setSelectedItems] = useState(new Set());
+  useEffect(() => {
+    setSelectedItems(new Set());
+  }, [selectedStatus, searchText]);
+
+  // modal 時設置初始數據
   const onClickNewInterview = () => {
     dispatch(openFormModalForCreate());
   };
@@ -83,7 +89,6 @@ const TodoPage = () => {
   };
 
   const onFormModalSubmit = (formData) => {
-    console.log(formData);
     if (formModal.mode === INTERVIEW_MODAL_MODE.CREATE) {
       dispatch(addInterview(formData));
     } else {
@@ -102,18 +107,19 @@ const TodoPage = () => {
     setSelectedItems(new Set());
   };
 
-  // other
+  // filter DSelect&DTextField
   const onStatusChange = (value) => {
-    setSelectedStatus(value);
+    dispatch(setSelectedStatus(value));
   };
 
   const onSearchChange = (e) => {
     dispatch(setSearchText(e.target.value));
   };
 
+  // checkbox
   const onHeaderCheckboxChange = (checked) => {
     if (checked) {
-      setSelectedItems(new Set(interviews.map((item) => item.id)));
+      setSelectedItems(new Set(filteredInterviews.map((item) => item.id)));
     } else {
       setSelectedItems(new Set());
     }
@@ -149,8 +155,6 @@ const TodoPage = () => {
     return item[key];
   };
 
-  const searchIcon = <FaSearch style={{ color: "#1976d2" }} />;
-
   return (
     <div className="todo-page">
       <div className="todo-page__header">
@@ -170,7 +174,7 @@ const TodoPage = () => {
         <DTextField
           value={searchText}
           onChange={onSearchChange}
-          prependInnerIcon={searchIcon}
+          prependInnerIcon={<FaSearch style={{ color: "#1976d2" }} />}
           placeholder="請輸入欲搜尋內容"
           width="300px"
         />

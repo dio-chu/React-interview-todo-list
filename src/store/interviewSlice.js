@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
-import { INTERVIEW_RESULT } from "../constants/interviewStatus";
+import {
+  INTERVIEW_RESULT,
+  INTERVIEW_STATUS,
+} from "../constants/interviewStatus";
 
 export const TABLE_HEADERS = [
   { key: "edit", title: "編輯" },
@@ -33,6 +36,22 @@ const initialState = {
     },
   ],
   searchText: "",
+  selectedStatus: INTERVIEW_STATUS.ALL,
+};
+
+const matchesStatusFilter = (interviewStatus, filterStatus) => {
+  switch (
+    filterStatus // 修改這裡，檢查 filterStatus 而不是 interviewStatus
+  ) {
+    case INTERVIEW_STATUS.ALL:
+      return true;
+    case INTERVIEW_STATUS.SCHEDULED:
+      return interviewStatus === INTERVIEW_RESULT.NONE;
+    case INTERVIEW_STATUS.COMPLETED:
+      return interviewStatus !== INTERVIEW_RESULT.NONE;
+    default:
+      return false;
+  }
 };
 
 export const interviewSlice = createSlice({
@@ -72,25 +91,38 @@ export const interviewSlice = createSlice({
     setSearchText: (state, action) => {
       state.searchText = action.payload;
     },
+    setSelectedStatus: (state, action) => {
+      state.selectedStatus = action.payload;
+    },
   },
 });
 
 // Selectors
 export const selectAllInterviews = (state) => state.interviews.interviews;
 export const selectSearchText = (state) => state.interviews.searchText;
+export const selectSelectedStatus = (state) => state.interviews.selectedStatus; // 修改選擇器名稱
 
 export const selectFilteredInterviews = (state) => {
   const interviews = selectAllInterviews(state);
-  const searchText = selectSearchText(state).toLowerCase();
+  const searchText = selectSearchText(state);
+  const selectedStatus = selectSelectedStatus(state); // 使用修改後的選擇器
 
-  return searchText.trim()
-    ? interviews.filter(
-        (interview) =>
-          interview.companyName.toLowerCase().includes(searchText) ||
-          interview.position.toLowerCase().includes(searchText) ||
-          interview.interviewDate.includes(searchText)
-      )
-    : interviews;
+  const statusFiltered = interviews.filter((interview) =>
+    matchesStatusFilter(interview.status, selectedStatus)
+  );
+
+  if (!searchText.trim()) {
+    return statusFiltered;
+  }
+
+  const searchLower = searchText.toLowerCase();
+  return statusFiltered.filter((interview) => {
+    return (
+      interview.companyName.toLowerCase().includes(searchLower) ||
+      interview.position.toLowerCase().includes(searchLower) ||
+      interview.interviewDate.includes(searchText)
+    );
+  });
 };
 
 export const {
@@ -98,6 +130,7 @@ export const {
   updateInterview,
   deleteInterviews,
   setSearchText,
+  setSelectedStatus,
 } = interviewSlice.actions;
 
 export default interviewSlice.reducer;
