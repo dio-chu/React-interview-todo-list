@@ -1,5 +1,5 @@
 // hook
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // component
 import DButton from "../components/DButton";
@@ -12,102 +12,117 @@ import InterviewFormModal from "./components/InterviewFormModal";
 
 // constant
 import {
-  INTERVIEW_STATUS,
+  INTERVIEW_COLORS,
   INTERVIEW_STATUS_FILTERS,
   INTERVIEW_RESULT_OPTIONS,
 } from "../constants/interviewStatus";
 import { INTERVIEW_MODAL_MODE } from "../constants/interviewFormModal";
 
-// fake data
-import { MOCK_INTERVIEWS, TABLE_HEADERS } from "../constants/mockInterviews";
-
 // style
 import "../styles/pages/TodoPage.scss";
 import { FaPlus, FaSearch, FaTrash, FaPencilAlt } from "react-icons/fa";
 
+// redux
+import { useSelector, useDispatch } from "react-redux";
+import {
+  openFormModalForCreate,
+  openFormModalForEdit,
+  closeFormModal,
+  resetFormData,
+  updateFormData,
+  openDeleteModal,
+  closeDeleteModal,
+} from "../store/modalSlice";
+import {
+  addInterview,
+  updateInterview,
+  deleteInterviews,
+  selectAllInterviews,
+  setSearchText,
+  selectSearchText,
+  setSelectedStatus,
+  selectSelectedStatus,
+  selectFilteredInterviews,
+  TABLE_HEADERS,
+} from "../store/interviewSlice";
+
 const TodoPage = () => {
-  // ui
-  const [selectedStatus, setSelectedStatus] = useState(INTERVIEW_STATUS.ALL);
-  const [searchText, setSearchText] = useState("");
+  const dispatch = useDispatch();
+  // redux modal
+  const { formModal, deleteModal } = useSelector((state) => state.modals);
+
+  // redux interview
+  const interviews = useSelector(selectAllInterviews);
+  const searchText = useSelector(selectSearchText);
+  const selectedStatus = useSelector(selectSelectedStatus);
+  const filteredInterviews = useSelector(selectFilteredInterviews);
+
+  // checkbox
   const [selectedItems, setSelectedItems] = useState(new Set());
-
-  // modal
-  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState(INTERVIEW_MODAL_MODE.CREATE);
-
-  const [formData, setFormData] = useState({
-    companyName: "",
-    position: "",
-    status: "",
-    interviewDate: "",
-  });
-
-  // 打開 modal 時設置初始數據
-  const onClickNewInterview = () => {
-    setModalMode(INTERVIEW_MODAL_MODE.CREATE);
-    setFormData({
-      companyName: "",
-      position: "",
-      status: "",
-      interviewDate: "",
-    });
-    setIsFormModalOpen(true);
-  };
-
-  const onClickEditInterview = (id) => {
-    const editItem = MOCK_INTERVIEWS.find((item) => item.id === id);
-    setModalMode(INTERVIEW_MODAL_MODE.EDIT);
-    setFormData(editItem);
-    setIsFormModalOpen(true);
-  };
-
-  const onFormModalClose = () => {
-    setIsFormModalOpen(false);
-  };
-
-  const onFormModalExited = () => {
-    setFormData({
-      companyName: "",
-      position: "",
-      status: "",
-      interviewDate: "",
-    });
-  };
-  const onFormModalSubmit = (formData) => {
-    console.log(
-      modalMode === INTERVIEW_MODAL_MODE.CREATE
-        ? "Create new interview:"
-        : "Update interview:",
-      formData
-    );
-    onFormModalClose();
-  };
-
-  const onDeleteModalConfirm = () => {
-    console.log("Delete selected items:", Array.from(selectedItems));
-    setIsDeleteModalOpen(false);
+  useEffect(() => {
     setSelectedItems(new Set());
-  };
-  const onClickDelete = () => {
-    setIsDeleteModalOpen(true);
-  };
-  const onDeleteModalClose = () => {
-    setIsDeleteModalOpen(false);
+  }, [selectedStatus, searchText]);
+
+  // Form Modal Actions
+  const formModalActions = {
+    openForCreate: () => {
+      dispatch(openFormModalForCreate());
+    },
+    openForEdit: (id) => {
+      const interview = interviews.find((item) => item.id === id);
+      dispatch(openFormModalForEdit(interview));
+    },
+    close: () => {
+      dispatch(closeFormModal());
+    },
+    reset: () => {
+      dispatch(resetFormData());
+    },
+    submit: (formData) => {
+      if (formModal.mode === INTERVIEW_MODAL_MODE.CREATE) {
+        dispatch(addInterview(formData));
+      } else {
+        const updateData = {
+          ...formData,
+          id: formModal.formData.id,
+        };
+        dispatch(updateInterview(updateData));
+      }
+      dispatch(closeFormModal());
+    },
+    updateData: (data) => {
+      dispatch(updateFormData(data));
+    },
   };
 
-  // other
+  // Delete Modal Actions
+  const deleteModalActions = {
+    open: () => {
+      dispatch(openDeleteModal());
+    },
+    close: () => {
+      dispatch(closeDeleteModal());
+    },
+    confirm: () => {
+      dispatch(deleteInterviews(Array.from(selectedItems)));
+      dispatch(closeDeleteModal());
+      setSelectedItems(new Set());
+    },
+  };
+
+  // filter DSelect&DTextField
   const onStatusChange = (value) => {
-    setSelectedStatus(value);
+    dispatch(setSelectedStatus(value));
   };
 
   const onSearchChange = (e) => {
-    setSearchText(e.target.value);
+    dispatch(setSearchText(e.target.value));
   };
 
+  // checkbox
   const onHeaderCheckboxChange = (checked) => {
     if (checked) {
-      setSelectedItems(new Set(MOCK_INTERVIEWS.map((item) => item.id)));
+      setSelectedItems(new Set(filteredInterviews.map((item) => item.id)));
     } else {
       setSelectedItems(new Set());
     }
@@ -129,7 +144,7 @@ const TodoPage = () => {
         <DIconButton
           size="small"
           disabled={!item.edit}
-          onClick={() => onClickEditInterview(item.id)}
+          onClick={() => formModalActions.openForEdit(item.id)}
           icon={<FaPencilAlt style={{ color: "#1976d2" }} />}
         />
       );
@@ -138,19 +153,27 @@ const TodoPage = () => {
       const statusOption = INTERVIEW_RESULT_OPTIONS.find(
         (option) => option.value === item[key]
       );
-      return statusOption ? statusOption.label : "未知狀態";
+      return statusOption ? (
+        <span
+          style={{
+            color: INTERVIEW_COLORS[item[key]],
+          }}
+        >
+          {statusOption.label}
+        </span>
+      ) : (
+        "未知狀態"
+      );
     }
     return item[key];
   };
-
-  const searchIcon = <FaSearch style={{ color: "#1976d2" }} />;
 
   return (
     <div className="todo-page">
       <div className="todo-page__header">
         <DButton
           label="新增面試"
-          onClick={onClickNewInterview}
+          onClick={formModalActions.openForCreate}
           startIcon={<FaPlus />}
         />
       </div>
@@ -164,7 +187,7 @@ const TodoPage = () => {
         <DTextField
           value={searchText}
           onChange={onSearchChange}
-          prependInnerIcon={searchIcon}
+          prependInnerIcon={<FaSearch style={{ color: "#1976d2" }} />}
           placeholder="請輸入欲搜尋內容"
           width="300px"
         />
@@ -175,41 +198,41 @@ const TodoPage = () => {
           {selectedItems.size > 0 && (
             <DButton
               label="刪除"
-              onClick={onClickDelete}
+              onClick={deleteModalActions.open}
               density="compact"
               startIcon={<FaTrash />}
-              variant="error"
             />
           )}
         </div>
         <DDataTable
           headers={TABLE_HEADERS}
-          items={MOCK_INTERVIEWS}
+          items={filteredInterviews}
           showCheckbox
           onHeaderCheckboxChange={onHeaderCheckboxChange}
           onItemCheckboxChange={onItemCheckboxChange}
           renderCell={renderCell}
-          isHeaderChecked={selectedItems.size === MOCK_INTERVIEWS.length}
+          isHeaderChecked={selectedItems.size === filteredInterviews.length}
           getIsItemChecked={(item) => selectedItems.has(item.id)}
         />
       </div>
 
       <InterviewFormModal
-        isShow={isFormModalOpen}
-        mode={modalMode}
-        formData={formData}
-        onFormDataChange={setFormData}
-        onClose={onFormModalClose}
-        onSubmit={onFormModalSubmit}
-        onExited={onFormModalExited}
+        isShow={formModal.isOpen}
+        mode={formModal.mode}
+        formData={formModal.formData}
+        onFormDataChange={formModalActions.updateData}
+        isPersistent
+        onClose={formModalActions.close}
+        onSubmit={formModalActions.submit}
+        onExited={formModalActions.reset}
       />
 
       <DCommonModal
-        isShow={isDeleteModalOpen}
+        isShow={deleteModal.isOpen}
         title="確認刪除？"
         confirmText="確認"
-        onClose={onDeleteModalClose}
-        onConfirm={onDeleteModalConfirm}
+        onClose={deleteModalActions.close}
+        onConfirm={deleteModalActions.confirm}
       >
         刪除的履歷將無法恢復
       </DCommonModal>
