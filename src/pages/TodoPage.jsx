@@ -12,6 +12,7 @@ import InterviewFormModal from "./components/InterviewFormModal";
 
 // constant
 import {
+  INTERVIEW_COLORS,
   INTERVIEW_STATUS_FILTERS,
   INTERVIEW_RESULT_OPTIONS,
 } from "../constants/interviewStatus";
@@ -62,49 +63,51 @@ const TodoPage = () => {
     setSelectedItems(new Set());
   }, [selectedStatus, searchText]);
 
-  // modal 時設置初始數據
-  const onClickNewInterview = () => {
-    dispatch(openFormModalForCreate());
+  // Form Modal Actions
+  const formModalActions = {
+    openForCreate: () => {
+      dispatch(openFormModalForCreate());
+    },
+    openForEdit: (id) => {
+      const interview = interviews.find((item) => item.id === id);
+      dispatch(openFormModalForEdit(interview));
+    },
+    close: () => {
+      dispatch(closeFormModal());
+    },
+    reset: () => {
+      dispatch(resetFormData());
+    },
+    submit: (formData) => {
+      if (formModal.mode === INTERVIEW_MODAL_MODE.CREATE) {
+        dispatch(addInterview(formData));
+      } else {
+        const updateData = {
+          ...formData,
+          id: formModal.formData.id,
+        };
+        dispatch(updateInterview(updateData));
+      }
+      dispatch(closeFormModal());
+    },
+    updateData: (data) => {
+      dispatch(updateFormData(data));
+    },
   };
 
-  const onClickEditInterview = (id) => {
-    const interview = interviews.find((item) => item.id === id);
-    dispatch(openFormModalForEdit(interview));
-  };
-
-  const onFormModalClose = () => {
-    dispatch(closeFormModal());
-  };
-
-  const onFormModalExited = () => {
-    dispatch(resetFormData());
-  };
-
-  const onClickDelete = () => {
-    dispatch(openDeleteModal());
-  };
-
-  const onDeleteModalClose = () => {
-    dispatch(closeDeleteModal());
-  };
-
-  const onFormModalSubmit = (formData) => {
-    if (formModal.mode === INTERVIEW_MODAL_MODE.CREATE) {
-      dispatch(addInterview(formData));
-    } else {
-      const updateData = {
-        ...formData,
-        id: formModal.formData.id,
-      };
-      dispatch(updateInterview(updateData));
-    }
-    dispatch(closeFormModal());
-  };
-
-  const onDeleteModalConfirm = () => {
-    dispatch(deleteInterviews(Array.from(selectedItems)));
-    dispatch(closeDeleteModal());
-    setSelectedItems(new Set());
+  // Delete Modal Actions
+  const deleteModalActions = {
+    open: () => {
+      dispatch(openDeleteModal());
+    },
+    close: () => {
+      dispatch(closeDeleteModal());
+    },
+    confirm: () => {
+      dispatch(deleteInterviews(Array.from(selectedItems)));
+      dispatch(closeDeleteModal());
+      setSelectedItems(new Set());
+    },
   };
 
   // filter DSelect&DTextField
@@ -141,7 +144,7 @@ const TodoPage = () => {
         <DIconButton
           size="small"
           disabled={!item.edit}
-          onClick={() => onClickEditInterview(item.id)}
+          onClick={() => formModalActions.openForEdit(item.id)}
           icon={<FaPencilAlt style={{ color: "#1976d2" }} />}
         />
       );
@@ -150,7 +153,17 @@ const TodoPage = () => {
       const statusOption = INTERVIEW_RESULT_OPTIONS.find(
         (option) => option.value === item[key]
       );
-      return statusOption ? statusOption.label : "未知狀態";
+      return statusOption ? (
+        <span
+          style={{
+            color: INTERVIEW_COLORS[item[key]],
+          }}
+        >
+          {statusOption.label}
+        </span>
+      ) : (
+        "未知狀態"
+      );
     }
     return item[key];
   };
@@ -160,7 +173,7 @@ const TodoPage = () => {
       <div className="todo-page__header">
         <DButton
           label="新增面試"
-          onClick={onClickNewInterview}
+          onClick={formModalActions.openForCreate}
           startIcon={<FaPlus />}
         />
       </div>
@@ -185,7 +198,7 @@ const TodoPage = () => {
           {selectedItems.size > 0 && (
             <DButton
               label="刪除"
-              onClick={onClickDelete}
+              onClick={deleteModalActions.open}
               density="compact"
               startIcon={<FaTrash />}
             />
@@ -207,19 +220,19 @@ const TodoPage = () => {
         isShow={formModal.isOpen}
         mode={formModal.mode}
         formData={formModal.formData}
-        onFormDataChange={(data) => dispatch(updateFormData(data))}
+        onFormDataChange={formModalActions.updateData}
         isPersistent
-        onClose={onFormModalClose}
-        onSubmit={onFormModalSubmit}
-        onExited={onFormModalExited}
+        onClose={formModalActions.close}
+        onSubmit={formModalActions.submit}
+        onExited={formModalActions.reset}
       />
 
       <DCommonModal
         isShow={deleteModal.isOpen}
         title="確認刪除？"
         confirmText="確認"
-        onClose={onDeleteModalClose}
-        onConfirm={onDeleteModalConfirm}
+        onClose={deleteModalActions.close}
+        onConfirm={deleteModalActions.confirm}
       >
         刪除的履歷將無法恢復
       </DCommonModal>

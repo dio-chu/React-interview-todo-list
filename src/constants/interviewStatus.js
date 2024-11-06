@@ -29,6 +29,13 @@ export const INTERVIEW_RESULT = {
   GHOST: "ghost",
 };
 
+export const INTERVIEW_COLORS = {
+  admitted: "#007EE2", // 錄取
+  not_admitted: "#D82222", // 未錄取
+  none: "#00A096", // 等待面試
+  ghost: "#8F8F8F", // 無聲卡
+};
+
 export const INTERVIEW_RESULT_OPTIONS = [
   {
     id: "1",
