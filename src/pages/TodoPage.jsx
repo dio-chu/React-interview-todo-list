@@ -46,12 +46,29 @@ import {
   TABLE_HEADERS,
 } from "../store/interviewSlice";
 
+// i18n
 import { useTranslation } from "react-i18next";
+
+// cookie
+import Cookies from "js-cookie";
 
 const TodoPage = () => {
   const { t } = useTranslation();
   const headers = TABLE_HEADERS(t);
   const dispatch = useDispatch();
+  // cookie
+  const [showWelcome, setShowWelcome] = useState(false);
+  useEffect(() => {
+    const hasVisited = Cookies.get("hasVisitedTodoList");
+    if (!hasVisited) {
+      setShowWelcome(true);
+      Cookies.set("hasVisitedTodoList", "true", { expires: 7 });
+    }
+  }, []);
+  const handleCloseWelcome = () => {
+    setShowWelcome(false);
+  };
+
   // redux modal
   const { formModal, deleteModal } = useSelector((state) => state.modals);
 
@@ -239,6 +256,17 @@ const TodoPage = () => {
         onConfirm={deleteModalActions.confirm}
       >
         {t("interview.deleteWarning")}
+      </DCommonModal>
+
+      <DCommonModal
+        isPersistent
+        isShow={showWelcome}
+        title={t("welcome.title")}
+        confirmText={t("common.confirm")}
+        onClose={handleCloseWelcome}
+        onConfirm={handleCloseWelcome}
+      >
+        {t("welcome.message")}
       </DCommonModal>
     </div>
   );

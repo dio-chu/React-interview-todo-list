@@ -35,5 +35,9 @@
     "status": "Status",
     "interviewDate": "Interview Date",
     "updateDate": "Update Date"
+  },
+  "welcome": {
+    "title": "Welcome",
+    "message": "This is an interview tracking system for recording your personal interview status"
   }
 }
