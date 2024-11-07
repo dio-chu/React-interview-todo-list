@@ -9,6 +9,8 @@ import {
 } from "../../constants/interviewFormModal";
 import "../../styles/pages/InterviewFormModal.scss";
 
+import { useTranslation } from "react-i18next";
+
 const InterviewFormModal = ({
   mode = INTERVIEW_MODAL_MODE.CREATE,
   onSubmit,
@@ -16,6 +18,8 @@ const InterviewFormModal = ({
   onFormDataChange,
   ...modalProps
 }) => {
+  const { t } = useTranslation();
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     onFormDataChange({ ...formData, [name]: value });
@@ -29,26 +33,30 @@ const InterviewFormModal = ({
     <DCommonModal
       {...modalProps}
       title={INTERVIEW_MODAL_TITLE[mode]}
-      confirmText="儲存"
+      confirmText={t("common.save")}
       onConfirm={() => onSubmit(formData)}
       width="480px"
     >
       <div className="interview-form">
         <div className="interview-form__field">
-          <label className="interview-form__label">公司名稱</label>
+          <label className="interview-form__label">
+            {t("interview.company")}
+          </label>
           <DTextField
             name="companyName"
-            placeholder="請輸入公司名稱"
+            placeholder={t("interview.companyPlaceholder")}
             value={formData.companyName}
             onChange={handleInputChange}
           />
         </div>
 
         <div className="interview-form__field">
-          <label className="interview-form__label">面試職位</label>
+          <label className="interview-form__label">
+            {t("interview.position")}
+          </label>
           <DTextField
             name="position"
-            placeholder="請輸入面試職位"
+            placeholder={t("interview.positionPlaceholder")}
             value={formData.position}
             onChange={handleInputChange}
           />
@@ -56,7 +64,9 @@ const InterviewFormModal = ({
 
         {mode === INTERVIEW_MODAL_MODE.EDIT && (
           <div className="interview-form__field">
-            <label className="interview-form__label">面試進度</label>
+            <label className="interview-form__label">
+              {t("interview.status")}
+            </label>
             <DSelect
               name="status"
               options={INTERVIEW_RESULT_OPTIONS}
@@ -67,7 +77,7 @@ const InterviewFormModal = ({
         )}
 
         <div className="interview-form__field">
-          <label className="interview-form__label">面試日期</label>
+          <label className="interview-form__label">{t("interview.date")}</label>
           <DTextField
             name="interviewDate"
             type="date"

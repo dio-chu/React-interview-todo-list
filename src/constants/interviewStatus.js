@@ -1,26 +1,9 @@
+// src/constants/interviewStatus.js
 export const INTERVIEW_STATUS = {
   ALL: "all",
   SCHEDULED: "scheduled",
   COMPLETED: "completed",
 };
-
-export const INTERVIEW_STATUS_FILTERS = [
-  {
-    id: "1",
-    value: INTERVIEW_STATUS.ALL,
-    label: "全部",
-  },
-  {
-    id: "2",
-    value: INTERVIEW_STATUS.SCHEDULED,
-    label: "已安排面試",
-  },
-  {
-    id: "3",
-    value: INTERVIEW_STATUS.COMPLETED,
-    label: "已有結果",
-  },
-];
 
 export const INTERVIEW_RESULT = {
   NONE: "none",
@@ -30,31 +13,50 @@ export const INTERVIEW_RESULT = {
 };
 
 export const INTERVIEW_COLORS = {
-  admitted: "#007EE2", // 錄取
-  not_admitted: "#D82222", // 未錄取
-  none: "#00A096", // 等待面試
-  ghost: "#8F8F8F", // 無聲卡
+  admitted: "#007EE2",
+  not_admitted: "#D82222",
+  none: "#00A096",
+  ghost: "#8F8F8F",
 };
 
-export const INTERVIEW_RESULT_OPTIONS = [
+// 保持原本的名稱，但改為函數形式
+export const INTERVIEW_STATUS_FILTERS = (t) => [
+  {
+    id: "1",
+    value: INTERVIEW_STATUS.ALL,
+    label: t("status.all"),
+  },
+  {
+    id: "2",
+    value: INTERVIEW_STATUS.SCHEDULED,
+    label: t("status.scheduled"),
+  },
+  {
+    id: "3",
+    value: INTERVIEW_STATUS.COMPLETED,
+    label: t("status.completed"),
+  },
+];
+
+export const INTERVIEW_RESULT_OPTIONS = (t) => [
   {
     id: "1",
     value: INTERVIEW_RESULT.NONE,
-    label: "等待面試",
+    label: t("status.none"),
   },
   {
     id: "2",
     value: INTERVIEW_RESULT.NOT_ADMITTED,
-    label: "未錄取",
+    label: t("status.notAdmitted"),
   },
   {
     id: "3",
     value: INTERVIEW_RESULT.ADMITTED,
-    label: "錄取",
+    label: t("status.admitted"),
   },
   {
     id: "4",
     value: INTERVIEW_RESULT.GHOST,
-    label: "無聲卡",
+    label: t("status.ghost"),
   },
 ];
