@@ -46,7 +46,11 @@ import {
   TABLE_HEADERS,
 } from "../store/interviewSlice";
 
+import { useTranslation } from "react-i18next";
+
 const TodoPage = () => {
+  const { t } = useTranslation();
+  const headers = TABLE_HEADERS(t);
   const dispatch = useDispatch();
   // redux modal
   const { formModal, deleteModal } = useSelector((state) => state.modals);
@@ -150,7 +154,7 @@ const TodoPage = () => {
       );
     }
     if (key === "status") {
-      const statusOption = INTERVIEW_RESULT_OPTIONS.find(
+      const statusOption = INTERVIEW_RESULT_OPTIONS(t).find(
         (option) => option.value === item[key]
       );
       return statusOption ? (
@@ -172,7 +176,7 @@ const TodoPage = () => {
     <div className="todo-page">
       <div className="todo-page__header">
         <DButton
-          label="新增面試"
+          label={t("interview.add")}
           onClick={formModalActions.openForCreate}
           startIcon={<FaPlus />}
         />
@@ -181,14 +185,14 @@ const TodoPage = () => {
       <div className="todo-page__filters">
         <DSelect
           value={selectedStatus}
-          options={INTERVIEW_STATUS_FILTERS}
+          options={INTERVIEW_STATUS_FILTERS(t)}
           onChange={onStatusChange}
         />
         <DTextField
           value={searchText}
           onChange={onSearchChange}
           prependInnerIcon={<FaSearch style={{ color: "#1976d2" }} />}
-          placeholder="請輸入欲搜尋內容"
+          placeholder={t("interview.searchPlaceholder")}
           width="300px"
         />
       </div>
@@ -197,7 +201,7 @@ const TodoPage = () => {
         <div className="todo-page__table-actions">
           {selectedItems.size > 0 && (
             <DButton
-              label="刪除"
+              label={t("common.delete")}
               onClick={deleteModalActions.open}
               density="compact"
               startIcon={<FaTrash />}
@@ -205,7 +209,7 @@ const TodoPage = () => {
           )}
         </div>
         <DDataTable
-          headers={TABLE_HEADERS}
+          headers={headers}
           items={filteredInterviews}
           showCheckbox
           onHeaderCheckboxChange={onHeaderCheckboxChange}
@@ -229,12 +233,12 @@ const TodoPage = () => {
 
       <DCommonModal
         isShow={deleteModal.isOpen}
-        title="確認刪除？"
-        confirmText="確認"
+        title={t("interview.deleteConfirm")}
+        confirmText={t("common.save")}
         onClose={deleteModalActions.close}
         onConfirm={deleteModalActions.confirm}
       >
-        刪除的履歷將無法恢復
+        {t("interview.deleteWarning")}
       </DCommonModal>
     </div>
   );

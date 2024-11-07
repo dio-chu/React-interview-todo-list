@@ -1,0 +1,39 @@
+{
+  "common": {
+    "save": "Save",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "search": "Search"
+  },
+  "interview": {
+    "title": "Interview Management",
+    "add": "Add Interview",
+    "company": "Company Name",
+    "position": "Position",
+    "date": "Interview Date",
+    "status": "Interview Status",
+    "searchPlaceholder": "Enter search text",
+    "deleteConfirm": "Confirm Delete?",
+    "deleteWarning": "Deleted resumes cannot be recovered",
+    "companyPlaceholder": "Enter company name",
+    "positionPlaceholder": "Enter position"
+  },
+  "status": {
+    "all": "All",
+    "scheduled": "Scheduled",
+    "completed": "Completed",
+    "none": "Waiting",
+    "notAdmitted": "Not Admitted",
+    "admitted": "Admitted",
+    "ghost": "Ghost",
+    "unknown": "Unknown Status"
+  },
+  "table": {
+    "edit": "Edit",
+    "companyName": "Company Name",
+    "position": "Position",
+    "status": "Status",
+    "interviewDate": "Interview Date",
+    "updateDate": "Update Date"
+  }
+}

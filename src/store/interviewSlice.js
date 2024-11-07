@@ -1,17 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createSelector } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import {
   INTERVIEW_RESULT,
   INTERVIEW_STATUS,
 } from "../constants/interviewStatus";
 
-export const TABLE_HEADERS = [
-  { key: "edit", title: "編輯" },
-  { key: "companyName", title: "公司名稱" },
-  { key: "position", title: "面試職位" },
-  { key: "status", title: "狀態" },
-  { key: "interviewDate", title: "面試日期" },
-  { key: "updateDate", title: "更新日期" },
+export const TABLE_HEADERS = (t) => [
+  { key: "edit", title: t("table.edit") },
+  { key: "companyName", title: t("table.companyName") },
+  { key: "position", title: t("table.position") },
+  { key: "status", title: t("table.status") },
+  { key: "interviewDate", title: t("table.interviewDate") },
+  { key: "updateDate", title: t("table.updateDate") },
 ];
 
 const initialState = {
@@ -76,9 +76,7 @@ const initialState = {
 };
 
 const matchesStatusFilter = (interviewStatus, filterStatus) => {
-  switch (
-    filterStatus // 修改這裡，檢查 filterStatus 而不是 interviewStatus
-  ) {
+  switch (filterStatus) {
     case INTERVIEW_STATUS.ALL:
       return true;
     case INTERVIEW_STATUS.SCHEDULED:
@@ -138,28 +136,32 @@ export const selectAllInterviews = (state) => state.interviews.interviews;
 export const selectSearchText = (state) => state.interviews.searchText;
 export const selectSelectedStatus = (state) => state.interviews.selectedStatus; // 修改選擇器名稱
 
-export const selectFilteredInterviews = (state) => {
-  const interviews = selectAllInterviews(state);
-  const searchText = selectSearchText(state);
-  const selectedStatus = selectSelectedStatus(state); // 使用修改後的選擇器
-
-  const statusFiltered = interviews.filter((interview) =>
-    matchesStatusFilter(interview.status, selectedStatus)
-  );
-
-  if (!searchText.trim()) {
-    return statusFiltered;
-  }
-
-  const searchLower = searchText.toLowerCase();
-  return statusFiltered.filter((interview) => {
-    return (
-      interview.companyName.toLowerCase().includes(searchLower) ||
-      interview.position.toLowerCase().includes(searchLower) ||
-      interview.interviewDate.includes(searchText)
+export const selectStatusFilteredInterviews = createSelector(
+  [selectAllInterviews, selectSelectedStatus],
+  (interviews, selectedStatus) => {
+    return interviews.filter((interview) =>
+      matchesStatusFilter(interview.status, selectedStatus)
     );
-  });
-};
+  }
+);
+
+export const selectFilteredInterviews = createSelector(
+  [selectStatusFilteredInterviews, selectSearchText],
+  (statusFilteredInterviews, searchText) => {
+    if (!searchText.trim()) {
+      return statusFilteredInterviews;
+    }
+
+    const searchLower = searchText.toLowerCase();
+    return statusFilteredInterviews.filter((interview) => {
+      return (
+        interview.companyName.toLowerCase().includes(searchLower) ||
+        interview.position.toLowerCase().includes(searchLower) ||
+        interview.interviewDate.includes(searchText)
+      );
+    });
+  }
+);
 
 export const {
   addInterview,

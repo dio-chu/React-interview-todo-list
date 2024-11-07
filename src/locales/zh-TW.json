@@ -1,0 +1,39 @@
+{
+  "common": {
+    "save": "儲存",
+    "delete": "刪除",
+    "confirm": "確認",
+    "search": "搜尋"
+  },
+  "interview": {
+    "title": "面試管理",
+    "add": "新增面試",
+    "company": "公司名稱",
+    "position": "面試職位",
+    "date": "面試日期",
+    "status": "面試進度",
+    "searchPlaceholder": "請輸入欲搜尋內容",
+    "deleteConfirm": "確認刪除？",
+    "deleteWarning": "刪除的履歷將無法恢復",
+    "companyPlaceholder": "請輸入公司名稱",
+    "positionPlaceholder": "請輸入面試職位"
+  },
+  "status": {
+    "all": "全部",
+    "scheduled": "已安排面試",
+    "completed": "已有結果",
+    "none": "等待面試",
+    "notAdmitted": "未錄取",
+    "admitted": "錄取",
+    "ghost": "無聲卡",
+    "unknown": "未知狀態"
+  },
+  "table": {
+    "edit": "編輯",
+    "companyName": "公司名稱",
+    "position": "面試職位",
+    "status": "狀態",
+    "interviewDate": "面試日期",
+    "updateDate": "更新日期"
+  }
+}

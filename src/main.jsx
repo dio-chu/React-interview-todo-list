@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import App from "./App.jsx";
+import "./i18n.js";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
