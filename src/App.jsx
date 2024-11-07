@@ -7,7 +7,7 @@ import "./styles/global.scss";
 
 function App() {
   return (
-    <Router>
+    <Router basename="/React-interview-todo-list">
       <div style={{ position: "absolute", top: "1rem", right: "1rem" }}>
         <LanguageToggle />
       </div>
