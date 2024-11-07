@@ -19,7 +19,7 @@ const InterviewFormModal = ({
   ...modalProps
 }) => {
   const { t } = useTranslation();
-
+  const statusOptions = INTERVIEW_RESULT_OPTIONS(t);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     onFormDataChange({ ...formData, [name]: value });
@@ -32,7 +32,7 @@ const InterviewFormModal = ({
   return (
     <DCommonModal
       {...modalProps}
-      title={INTERVIEW_MODAL_TITLE[mode]}
+      title={INTERVIEW_MODAL_TITLE(t)[mode]}
       confirmText={t("common.save")}
       onConfirm={() => onSubmit(formData)}
       width="480px"
@@ -69,7 +69,7 @@ const InterviewFormModal = ({
             </label>
             <DSelect
               name="status"
-              options={INTERVIEW_RESULT_OPTIONS}
+              options={statusOptions}
               value={formData.status}
               onChange={handleSelectChange}
             />

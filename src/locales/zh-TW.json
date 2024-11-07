@@ -8,6 +8,7 @@
   "interview": {
     "title": "面試管理",
     "add": "新增面試",
+    "edit": "編輯面試",
     "company": "公司名稱",
     "position": "面試職位",
     "date": "面試日期",

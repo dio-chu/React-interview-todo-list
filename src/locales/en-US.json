@@ -8,6 +8,7 @@
   "interview": {
     "title": "Interview Management",
     "add": "Add Interview",
+    "edit": "Edit Interview",
     "company": "Company Name",
     "position": "Position",
     "date": "Interview Date",
