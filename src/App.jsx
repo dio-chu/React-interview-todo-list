@@ -8,14 +8,18 @@ import "./styles/global.scss";
 function App() {
   return (
     <Router basename="/React-interview-todo-list">
-      <div style={{ position: "absolute", top: "1rem", right: "1rem" }}>
-        <LanguageToggle />
-      </div>
+      <div className="app-container">
+        <div className="language-toggle-container">
+          <LanguageToggle />
+        </div>
 
-      <Routes>
-        <Route path="/" element={<TodoPage />} />
-        <Route path="/chart" element={<ChartPage />} />
-      </Routes>
+        <div className="main-content">
+          <Routes>
+            <Route path="/" element={<TodoPage />} />
+            <Route path="/chart" element={<ChartPage />} />
+          </Routes>
+        </div>
+      </div>
     </Router>
   );
 }
