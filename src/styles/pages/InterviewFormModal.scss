@@ -3,14 +3,23 @@
     display: flex;
     align-items: center;
     padding: 12px;
-    gap: 20px;
+    width: 100%;
   }
 
   &__label {
     white-space: nowrap;
+    min-width: 100px;
+    text-align: left;
   }
 
   &__input {
     flex: 1;
+  }
+
+  :global {
+    .d-textfield,
+    .d-select {
+      margin-left: auto;
+    }
   }
 }

@@ -35,7 +35,7 @@ const InterviewFormModal = ({
       title={INTERVIEW_MODAL_TITLE(t)[mode]}
       confirmText={t("common.save")}
       onConfirm={() => onSubmit(formData)}
-      width="480px"
+      width="520px"
     >
       <div className="interview-form">
         <div className="interview-form__field">
@@ -47,6 +47,7 @@ const InterviewFormModal = ({
             placeholder={t("interview.companyPlaceholder")}
             value={formData.companyName}
             onChange={handleInputChange}
+            width="350px"
           />
         </div>
 
@@ -59,6 +60,7 @@ const InterviewFormModal = ({
             placeholder={t("interview.positionPlaceholder")}
             value={formData.position}
             onChange={handleInputChange}
+            width="350px"
           />
         </div>
 
@@ -72,6 +74,7 @@ const InterviewFormModal = ({
               options={statusOptions}
               value={formData.status}
               onChange={handleSelectChange}
+              width="350px"
             />
           </div>
         )}
@@ -83,6 +86,7 @@ const InterviewFormModal = ({
             type="date"
             value={formData.interviewDate}
             onChange={handleInputChange}
+            width="350px"
           />
         </div>
       </div>
