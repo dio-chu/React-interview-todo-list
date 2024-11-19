@@ -40,5 +40,8 @@
   "welcome": {
     "title": "Welcome",
     "message": "This is an interview tracking system for recording your personal interview status"
+  },
+  "vaildation": {
+    "required": "This field cannot empty"
   }
 }
