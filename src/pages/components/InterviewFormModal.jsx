@@ -17,7 +17,6 @@ const InterviewFormModal = ({
   mode = INTERVIEW_MODAL_MODE.CREATE,
   onSubmit,
   formData,
-  onFormDataChange,
   ...modalProps
 }) => {
   const { t } = useTranslation();
@@ -150,7 +149,7 @@ InterviewFormModal.propTypes = {
     interviewDate: PropTypes.string,
     status: PropTypes.string,
   }).isRequired,
-  onFormDataChange: PropTypes.func.isRequired,
+
   onSubmit: PropTypes.func.isRequired,
   ...DCommonModal.propTypes,
 };
