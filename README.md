@@ -1,5 +1,5 @@
 # 面試紀錄系統
-[Demo](http://dillinger.io/](https://dio-chu.github.io/React-interview-todo-list/ "link")
+[Demo](https://dio-chu.github.io/React-interview-todo-list/ "link")
 
 ![image](./public//readmeImg/PageImg.png)
 
