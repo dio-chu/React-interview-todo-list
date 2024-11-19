@@ -1,5 +1,10 @@
 import PropTypes from "prop-types";
 import DCheckbox from "./DCheckbox";
+import {
+  TiArrowUnsorted,
+  TiArrowSortedUp,
+  TiArrowSortedDown,
+} from "react-icons/ti";
 import "../styles/components/DDataTable.scss";
 
 const DDataTable = ({
@@ -9,11 +14,32 @@ const DDataTable = ({
   showCheckbox = false,
   onHeaderCheckboxChange = () => {},
   onItemCheckboxChange = () => {},
-  renderCell, // 用於自定義單元格渲染
+  renderCell,
   isHeaderChecked = false,
   getIsItemChecked = () => false,
   getIsItemCheckboxDisabled = () => false,
+  onSort = () => {},
+  sortConfig = { key: "", direction: "" },
 }) => {
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    onSort(key, direction);
+  };
+
+  const getSortIcon = (key) => {
+    if (sortConfig.key !== key) {
+      return <TiArrowUnsorted />;
+    }
+    return sortConfig.direction === "asc" ? (
+      <TiArrowSortedUp />
+    ) : (
+      <TiArrowSortedDown />
+    );
+  };
+
   return (
     <div className="d-data-table">
       <table>
@@ -29,7 +55,20 @@ const DDataTable = ({
               </th>
             )}
             {headers.map((header) => (
-              <th key={header.key}>{header.title}</th>
+              <th
+                key={header.key}
+                onClick={() => header.key !== "edit" && handleSort(header.key)}
+                className={
+                  header.key !== "edit" ? "d-data-table__sortable-header" : ""
+                }
+              >
+                {header.title}
+                {header.key !== "edit" && (
+                  <span className="d-data-table__sort-icon">
+                    {getSortIcon(header.key)}
+                  </span>
+                )}
+              </th>
             ))}
           </tr>
         </thead>
@@ -75,6 +114,11 @@ DDataTable.propTypes = {
   isHeaderChecked: PropTypes.bool,
   getIsItemChecked: PropTypes.func,
   getIsItemCheckboxDisabled: PropTypes.func,
+  onSort: PropTypes.func,
+  sortConfig: PropTypes.shape({
+    key: PropTypes.string,
+    direction: PropTypes.string,
+  }),
 };
 
 export default DDataTable;

@@ -44,6 +44,7 @@ import {
   selectSelectedStatus,
   selectFilteredInterviews,
   TABLE_HEADERS,
+  setFilteredInterviews,
 } from "../store/interviewSlice";
 
 // i18n
@@ -186,6 +187,41 @@ const TodoPage = () => {
     return item[key];
   };
 
+  const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
+
+  const handleSort = (key, direction) => {
+    setSortConfig({ key, direction });
+
+    const sortedInterviews = [...filteredInterviews].sort((a, b) => {
+      // 處理特殊的 status 欄位
+      if (key === "status") {
+        const statusOrder = {
+          none: 1,
+          admitted: 2,
+          not_admitted: 3,
+          ghost: 4,
+        };
+        return direction === "asc"
+          ? statusOrder[a[key]] - statusOrder[b[key]]
+          : statusOrder[b[key]] - statusOrder[a[key]];
+      }
+
+      // 處理日期欄位
+      if (key === "interviewDate" || key === "updateDate") {
+        const dateA = new Date(a[key]);
+        const dateB = new Date(b[key]);
+        return direction === "asc" ? dateA - dateB : dateB - dateA;
+      }
+
+      // 處理一般文字欄位
+      return direction === "asc"
+        ? a[key].localeCompare(b[key], "zh-TW")
+        : b[key].localeCompare(a[key], "zh-TW");
+    });
+
+    dispatch(setFilteredInterviews(sortedInterviews));
+  };
+
   return (
     <div className="todo-page">
       <div className="todo-page__header">
@@ -231,6 +267,8 @@ const TodoPage = () => {
           renderCell={renderCell}
           isHeaderChecked={selectedItems.size === filteredInterviews.length}
           getIsItemChecked={(item) => selectedItems.has(item.id)}
+          onSort={handleSort}
+          sortConfig={sortConfig}
         />
       </div>
 
