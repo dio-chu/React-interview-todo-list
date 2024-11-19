@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import { useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
 import DCommonModal from "../../components/modals/DCommonModal";
 import DTextField from "../../components/DTextField";
 import DSelect from "../../components/DSelect";
@@ -15,18 +17,31 @@ const InterviewFormModal = ({
   mode = INTERVIEW_MODAL_MODE.CREATE,
   onSubmit,
   formData,
-  onFormDataChange,
   ...modalProps
 }) => {
   const { t } = useTranslation();
   const statusOptions = INTERVIEW_RESULT_OPTIONS(t);
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    onFormDataChange({ ...formData, [name]: value });
-  };
 
-  const handleSelectChange = (value) => {
-    onFormDataChange({ ...formData, status: value });
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      companyName: "",
+      position: "",
+      interviewDate: "",
+      status: formData.status,
+    },
+  });
+
+  useEffect(() => {
+    reset(formData);
+  }, [formData, reset]);
+
+  const onFormSubmit = (data) => {
+    onSubmit(data);
   };
 
   return (
@@ -34,7 +49,7 @@ const InterviewFormModal = ({
       {...modalProps}
       title={INTERVIEW_MODAL_TITLE(t)[mode]}
       confirmText={t("common.save")}
-      onConfirm={() => onSubmit(formData)}
+      onConfirm={handleSubmit(onFormSubmit)}
       width="520px"
     >
       <div className="interview-form">
@@ -42,12 +57,21 @@ const InterviewFormModal = ({
           <label className="interview-form__label">
             {t("interview.company")}
           </label>
-          <DTextField
+          <Controller
             name="companyName"
-            placeholder={t("interview.companyPlaceholder")}
-            value={formData.companyName}
-            onChange={handleInputChange}
-            width="350px"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value } }) => (
+              <DTextField
+                value={value}
+                onChange={onChange}
+                placeholder={t("interview.companyPlaceholder")}
+                width="350px"
+                errorMessages={
+                  errors.companyName ? [t("vaildation.required")] : []
+                }
+              />
+            )}
           />
         </div>
 
@@ -55,12 +79,21 @@ const InterviewFormModal = ({
           <label className="interview-form__label">
             {t("interview.position")}
           </label>
-          <DTextField
+          <Controller
             name="position"
-            placeholder={t("interview.positionPlaceholder")}
-            value={formData.position}
-            onChange={handleInputChange}
-            width="350px"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value } }) => (
+              <DTextField
+                value={value}
+                onChange={onChange}
+                placeholder={t("interview.positionPlaceholder")}
+                width="350px"
+                errorMessages={
+                  errors.position ? [t("vaildation.required")] : []
+                }
+              />
+            )}
           />
         </div>
 
@@ -69,24 +102,38 @@ const InterviewFormModal = ({
             <label className="interview-form__label">
               {t("interview.status")}
             </label>
-            <DSelect
+            <Controller
               name="status"
-              options={statusOptions}
-              value={formData.status}
-              onChange={handleSelectChange}
-              width="350px"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <DSelect
+                  value={value}
+                  onChange={onChange}
+                  options={statusOptions}
+                  width="350px"
+                />
+              )}
             />
           </div>
         )}
 
         <div className="interview-form__field">
           <label className="interview-form__label">{t("interview.date")}</label>
-          <DTextField
+          <Controller
             name="interviewDate"
-            type="date"
-            value={formData.interviewDate}
-            onChange={handleInputChange}
-            width="350px"
+            control={control}
+            rules={{ required: true }}
+            render={({ field: { onChange, value } }) => (
+              <DTextField
+                value={value}
+                onChange={onChange}
+                type="date"
+                width="350px"
+                errorMessages={
+                  errors.interviewDate ? [t("vaildation.required")] : []
+                }
+              />
+            )}
           />
         </div>
       </div>
@@ -102,7 +149,7 @@ InterviewFormModal.propTypes = {
     interviewDate: PropTypes.string,
     status: PropTypes.string,
   }).isRequired,
-  onFormDataChange: PropTypes.func.isRequired,
+
   onSubmit: PropTypes.func.isRequired,
   ...DCommonModal.propTypes,
 };

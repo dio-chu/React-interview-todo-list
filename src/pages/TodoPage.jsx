@@ -111,9 +111,6 @@ const TodoPage = () => {
       }
       dispatch(closeFormModal());
     },
-    updateData: (data) => {
-      dispatch(updateFormData(data));
-    },
   };
 
   // Delete Modal Actions
@@ -241,7 +238,6 @@ const TodoPage = () => {
         isShow={formModal.isOpen}
         mode={formModal.mode}
         formData={formModal.formData}
-        onFormDataChange={formModalActions.updateData}
         isPersistent
         onClose={formModalActions.close}
         onSubmit={formModalActions.submit}

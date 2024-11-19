@@ -40,5 +40,8 @@
   "welcome": {
     "title": "歡迎使用",
     "message": "這是一個面試紀錄系統，可用於記錄個人面試狀況"
+  },
+  "vaildation": {
+    "required": "該欄位必填"
   }
 }
