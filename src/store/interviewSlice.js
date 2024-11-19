@@ -128,6 +128,9 @@ export const interviewSlice = createSlice({
     setSelectedStatus: (state, action) => {
       state.selectedStatus = action.payload;
     },
+    setFilteredInterviews: (state, action) => {
+      state.interviews = action.payload;
+    },
   },
 });
 
@@ -169,6 +172,7 @@ export const {
   deleteInterviews,
   setSearchText,
   setSelectedStatus,
+  setFilteredInterviews,
 } = interviewSlice.actions;
 
 export default interviewSlice.reducer;
